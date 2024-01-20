@@ -5,10 +5,6 @@ declare(strict_types=1);
 namespace LeanBookTools;
 
 use LeanBookTools\Printer\SimplePrinter;
-use LeanBookTools\Subscribers\Test\TestErroredSubscriber;
-use LeanBookTools\Subscribers\Test\TestFailedSubscriber;
-use LeanBookTools\Subscribers\Test\TestFinishedSubscriber;
-use LeanBookTools\Subscribers\Test\TestPassedSubscriber;
 use LeanBookTools\Subscribers\Test\TestPreparedSubscriber;
 use LeanBookTools\Subscribers\TestRunner\TestRunnerFinishedSubscriber;
 use PHPUnit\Event\Facade as EventFacade;
@@ -41,14 +37,10 @@ final class CleanerResultPrinterExtension implements Extension
         }
 
         // very important to replace output with ours
-        $facade->replaceOutput();
+        $facade->replaceResultOutput();
 
         $facade->registerSubscribers(
             new TestPreparedSubscriber($this->simplePrinter, $this->testResultCollector),
-            new TestFailedSubscriber($this->simplePrinter, $this->testResultCollector),
-            new TestErroredSubscriber($this->simplePrinter, $this->testResultCollector),
-            new TestFinishedSubscriber($this->simplePrinter, $this->testResultCollector),
-            new TestPassedSubscriber($this->simplePrinter, $this->testResultCollector),
             new TestRunnerFinishedSubscriber($this->simplePrinter, $this->testResultCollector),
         );
     }
